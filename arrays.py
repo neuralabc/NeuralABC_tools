@@ -5,6 +5,7 @@ Date: 2022-03-05
 
 import numpy as np
 
+
 def mm_norm(array):
     """
     Normalize n-dimensional numpy array to between 0 and 1
