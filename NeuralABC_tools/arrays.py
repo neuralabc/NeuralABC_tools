@@ -34,3 +34,21 @@ def map_vals_to_index(index_array, key_vals):
     palette = np.unique(index_array) #sorted order of values in index_array that we will map to
     index = np.digitize(index_array, palette, right=True) #create an index of palette to index_array
     return key_vals[index] #fill key_vals into index
+
+
+# slower implementation for testing
+def _loop_map_vals_to_index(index_array, key_vals):
+    """
+    Use for loop to map values into index array. For comparison with the faster map_vals_to_index and paranoid
+    verification that the same results are returned. All integers, including 0, included.
+
+    :param index_array: ndarray of indices (dtype int) for mapping key_vals into
+    :param key_vals: 1d ndarray with values to map to index_array in increasing order
+    :return:
+    """
+
+    index_array_vals = np.unique(index_array)  # returns ordered vector, equivalent to ordering of key_vals
+    d_out = np.zeros(index_array.shape)
+    for idx, val in enumerate(index_array_vals):
+        d_out[index_array == val] = key_vals[idx]
+    return d_out
