@@ -40,7 +40,8 @@ def map_vals_to_index(index_array, key_vals):
 def bin_statistics_by_index(index_array, val_array, statistic='mean', ignore_zero_index=True, remove_nans=True):
     """
     Wrapper for scipy.stats.binned_statistic
-
+    Calculate a statistic for elements in val_array based on common indices in index_array. Given a vector val_array, the statistic will be computed for all elements with the same index in the ndarray index_array. 
+    Background index could be ignored if it is 0, and nans could be ignored (but not removed) to calculate nan<statistics>. Nans elemets in val_array will be cast as 0 in bin_num output.
     :param index_array: np.ndarray with indices defining regions over which statistic will be calculated
     :param val_array: np.ndarray with values which will be summarized based on the index_array
     :param statistic: one of {'mean','std','median','count','sum','min','max',function}
@@ -48,8 +49,9 @@ def bin_statistics_by_index(index_array, val_array, statistic='mean', ignore_zer
     :param remove_nans: if True nans are removed from computation (effectively setting the statistic to "nan<stat>")
                         There are edge cases when this will fail, so be careful!
     :return:
+    dict: "stat" containing the calculated statistic, and "bin_num" containing bin indecies as ints.
     """
-    from scipy.stats import binned_statistic
+    
     if not (index_array.dtype == int):
         print('Your index array is not of type int, please fix!')
         return 0
