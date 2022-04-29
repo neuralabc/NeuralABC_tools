@@ -37,18 +37,19 @@ def map_vals_to_index(index_array, key_vals):
     return key_vals[index]  # fill key_vals into index
 
 
-def summed_statistics_by_index(index_array, val_array, statistic='mean', ignore_zero_index=True):
+def bin_statistics_by_index(index_array, val_array, statistic='mean', ignore_zero_index=True, remove_nans=True):
     """
-    Compute summary statistics on val_array based grouped by indices in index_array.
-    This is a basic wrapper for scipy.stats.binned_statistic.
+    Wrapper for scipy.stats.binned_statistic
 
-    :param index_array: np.ndarray (dtype = int) with indices defining regions over which statistic will be calculated
+    :param index_array: np.ndarray with indices defining regions over which statistic will be calculated
     :param val_array: np.ndarray with values which will be summarized based on the index_array
     :param statistic: one of {'mean','std','median','count','sum','min','max',function}
-    :param ignore_zero_index: skip 0 index if present {True, False}
+    :param ignore_zero_index: ignore zero index when mapping data to bins (almost always True)
+    :param remove_nans: if True nans are removed from computation (effectively setting the statistic to "nan<stat>")
+                        There are edge cases when this will fail, so be careful!
     :return:
     """
-
+    from scipy.stats import binned_statistic
     if not (index_array.dtype == int):
         print('Your index array is not of type int, please fix!')
         return 0
@@ -56,14 +57,27 @@ def summed_statistics_by_index(index_array, val_array, statistic='mean', ignore_
         bins = np.unique(index_array)
         if ignore_zero_index and (bins[0] == 0):
             bins = bins[1:]
-        bins = np.append(bins,
-                         bins.max() + 1)  # append an additional value to the end since we specify the bin edges
-        res = binned_statistic(index_array.ravel(), val_array.ravel(), bins=bins, statistic=statistic,
-                               range=(bins.min(), bins.max()))
-        stat = res.statistic
+        bins = np.append(bins,bins.max()+1) #append an additional value to the end since we specify the bin edges in binned_statistic
+        index_vec = index_array.ravel()
+        val_vec = val_array.ravel()
+
+        if remove_nans: #remove nans from the value input and from the indexes so that they stay the same shape
+            # if you have num_bins = num_els then this will fail
+            #if one of the bins is completely removed then I am not sure what this does
+            not_nan_mask = ~(np.isnan(val_vec))
+            val_vec = val_vec[not_nan_mask]
+            index_vec = index_vec[not_nan_mask]
+
+        res = binned_statistic(index_vec, val_vec, bins=bins, statistic=statistic, range=(bins.min(), bins.max()))
         # res.bin_edges
-        bin_num = res.binnumber.reshape(index_array.shape)
-        return {"stat": stat, "bin_num": res.binnumber.reshape(index_array.shape), "bin_edges":res.bin_edges}
+        if remove_nans: #here we explicitly cast nans to bin=0, which is background
+            bin_n = np.zeros_like(index_array.ravel())
+            bin_n[not_nan_mask] = res.binnumber
+        else:
+            bin_n = res.binnumber
+        bin_num = bin_n.reshape(index_array.shape)
+        return {"stat":res.statistic, "bin_num":bin_num}
+
 
 
 # slower implementations for testing
