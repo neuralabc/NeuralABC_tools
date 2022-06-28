@@ -8,7 +8,9 @@ def calc_penalties(data, vectors, index):
     Parameters:
     ----------------
     data: the data array for which we want to run PCA on
+    
     vectors: the collection of eigenvectors that are being calculated by eigengame()
+    
     index: the index of the vector within vectors that we want to calculate the penalty for
     
     Returns:
