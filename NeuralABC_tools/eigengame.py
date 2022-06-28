@@ -13,7 +13,7 @@ def calc_penalties(data, vectors, index):
     
     Returns:
     ----------------
-    :returns array: The penalties array, which will be used by eigengame() to calculate the vector update
+    :returns penalties: The penalties array, which will be used by eigengame() to calculate the vector update
 
     References:
     ----------------
@@ -45,8 +45,8 @@ def eigengame(data, n_components, epochs=100, learning_rate=0.1):
     Returns:
     ----------------
     M, vectors
-    Where M is the covariance matrix and vectors is a Numpy array containing 
-    the principal components, stacked horizontally
+    :returns M: the covariance matrix and vectors is a Numpy array containing 
+    :returns vectors: the principal components, stacked horizontally
     
     References:
     ----------------
