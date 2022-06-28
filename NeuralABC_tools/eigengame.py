@@ -37,7 +37,7 @@ def eigengame(data, n_components, epochs=100, learning_rate=0.1):
     
     Parameters:
     ----------------
-    :param data: (2D array), required: a Numpy array containing the data to run PCA on, in the form (features, samples) 
+    :param data: (2D array), required: a Numpy array containing the data to run PCA on, in the form (n_samples, n_features) where n_samples is the number of samples and n_features is the number of features
     :param n_components: (int), required: the number of principal components to extract
     :param epochs: (int), optional: the number of iterations to calculate each eigenvector. Default = 100
     :param learning_rate: (float), optional: Learning rate of the algorithm. Default = 0.1
