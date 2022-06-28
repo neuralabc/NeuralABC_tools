@@ -7,8 +7,8 @@ def calc_penalties(data, vectors, index):
     
     Parameters:
     ----------------
-    :param data: (arr), required: the data array for which we want to run PCA on.
-    :param vectors: (arr), required: the collection of eigenvectors that are being calculated by eigengame()
+    :param data: (2D array), required: the data array for which we want to run PCA on.
+    :param vectors: (2D array), required: the collection of eigenvectors that are being calculated by eigengame()
     :param index: (int), required: the index of the vector within vectors that we want to calculate the penalty for
     
     Returns:
@@ -37,7 +37,7 @@ def eigengame(data, n_components, epochs=100, learning_rate=0.1):
     
     Parameters:
     ----------------
-    :param data: (array), required: a Numpy array containing the data to run PCA on
+    :param data: (2D array), required: a Numpy array containing the data to run PCA on, in the form (features, samples) 
     :param n_components: (int), required: the number of principal components to extract
     :param epochs: (int), optional: the number of iterations to calculate each eigenvector. Default = 100
     :param learning_rate: (float), optional: Learning rate of the algorithm. Default = 0.1
