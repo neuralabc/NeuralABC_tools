@@ -14,7 +14,6 @@ def calc_penalties(data, vectors, index):
     Returns:
     ----------------
     :returns penalties: The penalties array, which will be used by eigengame() to calculate the vector update
-
     References:
     ----------------
     "EigenGame: PCA as a Nash Equilibrium"; Gemp et al., 2020 
@@ -44,16 +43,14 @@ def eigengame(data, n_components, epochs=100, learning_rate=0.1):
     
     Returns:
     ----------------
-    M, vectors
-    :returns M: the covariance matrix and vectors is a Numpy array containing 
+    vectors
     :returns vectors: the principal components, stacked horizontally
     
     References:
     ----------------
     "EigenGame: PCA as a Nash Equilibrium"; Gemp et al., 2020 
     """
-    M = np.dot(data.T, data)
-    dim = M.shape[0]
+    dim = data.shape[1]
     vectors = np.ones((dim, n_components))
     for t in range(n_components):
         for epoch in range(epochs):
@@ -64,4 +61,4 @@ def eigengame(data, n_components, epochs=100, learning_rate=0.1):
             vectors[:, t] = vectors[:, t] + learning_rate * delta_v
             vectors[:, t] = vectors[:, t] / np.linalg.norm(vectors[:, t])
             
-    return M, vectors.T
+    return vectors.T
