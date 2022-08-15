@@ -3,11 +3,11 @@ from multiprocessing import Pool
 import numpy as np
 
 def processor_procedure(processor_index, data, ranges, f):
-    masked_data_dict = {}
+    processed_data_dict = {}
 
     for index in ranges[processor_index]:
-        _amy_arr = f(data[index])
-        masked_data_dict[index] = _amy_arr
+        single_processed = f(data[index])
+        processed_data_dict[index] = single_processed
 
     return masked_data_dict
 
@@ -25,12 +25,8 @@ def Parallelize(data, f, num_cores=None):
         range_dict[i] = np.arange(i*int(num_subjects/(cores_to_use)), (i+1)*int(num_subjects/(cores_to_use)))
     range_dict[cores_to_use] = np.arange(num_subjects - num_subjects%cores_to_use, num_subjects)
     
-    maskeddata_CC = []
-    
     
     pass_data = []
-    
-    
     
     for core_index in range(num_cores):
         pass_data.append((core_index, data, range_dict, f))
