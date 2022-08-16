@@ -3,7 +3,7 @@ Collection of tools used in the NeuralABC lab
 
 Parallelize() example usage:
 
-```pyhon
+```python
 
 arr = [2,3,5,7,11,12]
 
