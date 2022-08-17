@@ -57,4 +57,7 @@ CPU times: user 863 ms, sys: 2.69 s, total: 3.56 s
 Wall time: 18.3 s
 '''
 
+print(processed.shape)
+#(1001, 39203)
+
 ```
