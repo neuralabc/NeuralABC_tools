@@ -2,6 +2,35 @@ import numpy as np
 
 
 
+def calc_penalties(data, vectors, index):
+    """
+    calc_penalties is a helper function used by eigengame() and should never be called outside
+    of it. 
+    
+    Parameters:
+    ----------------
+    :param data: (2D array), required: the data array for which we want to run PCA on.
+    :param vectors: (2D array), required: the collection of eigenvectors that are being calculated by eigengame()
+    :param index: (int), required: the index of the vector within vectors that we want to calculate the penalty for
+    
+    Returns:
+    ----------------
+    :returns penalties: The penalties array, which will be used by eigengame() to calculate the vector update
+    References:
+    ----------------
+    "EigenGame: PCA as a Nash Equilibrium"; Gemp et al., 2020 
+    """
+    vec = vectors[:, index]
+    penalties = np.zeros_like(np.dot(data, vectors[:, 0]))
+    
+    for i in range(index):
+        result = np.dot(data, vectors[:, i])
+        penalties += (np.dot(np.dot(data, vec), result) /
+         np.dot(result, result)
+        ) * result
+
+    return penalties 
+
 class EigenGame():
     def __init__(self, n_components, epochs=100, learning_rate=0.1):
         
@@ -47,6 +76,7 @@ class EigenGame():
         ----------------
         "EigenGame: PCA as a Nash Equilibrium"; Gemp et al., 2020 
         """
+        data = data.T
         self.data = data
 
         n_components = self.n_components
@@ -65,7 +95,7 @@ class EigenGame():
                 vectors[:, t] = vectors[:, t] / np.linalg.norm(vectors[:, t])
 
         self.eigenvectors = vectors.T
-        return vectors.T
+        return vectors
     
     def get_explained_variance_ratio(self):
         explained_variance_ratios = []
@@ -85,34 +115,6 @@ class EigenGame():
         return explained_variance_ratios / covariance_matrix_trace
 
 
-def calc_penalties(data, vectors, index):
-    """
-    calc_penalties is a helper function used by eigengame() and should never be called outside
-    of it. 
-    
-    Parameters:
-    ----------------
-    :param data: (2D array), required: the data array for which we want to run PCA on.
-    :param vectors: (2D array), required: the collection of eigenvectors that are being calculated by eigengame()
-    :param index: (int), required: the index of the vector within vectors that we want to calculate the penalty for
-    
-    Returns:
-    ----------------
-    :returns penalties: The penalties array, which will be used by eigengame() to calculate the vector update
-    References:
-    ----------------
-    "EigenGame: PCA as a Nash Equilibrium"; Gemp et al., 2020 
-    """
-    vec = vectors[:, index]
-    penalties = np.zeros_like(np.dot(data, vectors[:, 0]))
-    
-    for i in range(index):
-        result = np.dot(data, vectors[:, i])
-        penalties += (np.dot(np.dot(data, vec), result) /
-         np.dot(result, result)
-        ) * result
-
-    return penalties 
      
 def eigengame(data, n_components, epochs=100, learning_rate=0.1):
     """
