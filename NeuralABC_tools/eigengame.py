@@ -1,7 +1,5 @@
 import numpy as np
 
-
-
 def calc_penalties(data, vectors, index):
     """
     calc_penalties is a helper function used by eigengame() and should never be called outside
@@ -95,6 +93,7 @@ class EigenGame():
                 vectors[:, t] = vectors[:, t] / np.linalg.norm(vectors[:, t])
 
         self.eigenvectors = vectors.T
+        self.components = data @ self.eigenvectors.T
         return vectors
     
     def get_explained_variance_ratio(self):
@@ -113,7 +112,6 @@ class EigenGame():
             covariance_matrix_trace += np.dot(row, row)
         
         return explained_variance_ratios / covariance_matrix_trace
-
 
      
 def eigengame(data, n_components, epochs=100, learning_rate=0.1):
