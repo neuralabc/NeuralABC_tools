@@ -1,0 +1,13 @@
+[project]
+name = "neuralabc-tools"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "ipython>=8.12.3",
+    "jupyter>=1.1.1",
+    "nibabel>=5.2.1",
+    "nilearn>=0.10.4",
+    "pingouin>=0.5.5",
+]
